@@ -1,20 +1,63 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./src/pages/HomeScreen";
+import NoteScreen from "./src/pages/NoteScreen";
+import {
+  useFonts,
+  Arvo_400Regular,
+  Arvo_700Bold,
+  Rubik_400Regular,
+} from "@expo-google-fonts/dev";
+import AppLoading from "expo-app-loading";
+
+let coptions = {
+  headerTintColor: "#FCFBFE",
+  headerTitleStyle: {
+    fontFamily: "Arvo_700Bold",
+  },
+  headerStyle: {
+    backgroundColor: "#1F1D2B",
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+    shadowColor: "#FCFBFE",
+  },
+  headerShadowVisible: false,
+};
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  let [fontsLoaded] = useFonts({
+    Arvo_700Bold,
+    Arvo_400Regular,
+    Rubik_400Regular,
+  });
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              title: "Unote",
+              ...coptions,
+            }}
+          />
+          <Stack.Screen
+            name="Note"
+            component={NoteScreen}
+            options={{
+              title: "Note",
+              ...coptions,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
